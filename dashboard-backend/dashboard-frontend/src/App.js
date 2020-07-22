@@ -34,7 +34,7 @@ const renderSingleValue = (resultSet, key) => (
 class App extends Component {
   state = {
     startDate: new Date("2019/1/1"),
-    endDate: new Date("2019/12/31")
+    endDate: new Date("2019/6/31")
   };
 
   handleStartChange = date => {
@@ -66,7 +66,7 @@ class App extends Component {
           />
         </div>
         <Row>
-          <Col sm="4">
+          <Col sm="2">
             <Chart
               cubejsApi={cubejsApi}
               title="Total Users"
@@ -77,7 +77,7 @@ class App extends Component {
           <Col sm="4">
             <Chart
               cubejsApi={cubejsApi}
-              title="Total Settled Listings"
+              title="Settled Listings Count"
               query={{
                 measures: ["Listings.count"],
                 timeDimensions: [
