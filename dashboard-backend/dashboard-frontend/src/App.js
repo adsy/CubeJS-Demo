@@ -15,6 +15,11 @@ import moment from "moment";
 import numeral from "numeral";
 import cubejs from "@cubejs-client/core";
 import Chart from "./Chart.js";
+
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
+
 console.log(process.env.REACT_APP_CUBEJS_TOKEN);
 const cubejsApi = cubejs(process.env.REACT_APP_CUBEJS_TOKEN, {
   apiUrl: process.env.REACT_APP_API_URL
@@ -27,9 +32,39 @@ const renderSingleValue = (resultSet, key) => (
 );
 
 class App extends Component {
+  state = {
+    startDate: new Date("2019/1/1"),
+    endDate: new Date("2019/12/31")
+  };
+
+  handleStartChange = date => {
+    this.setState({
+      startDate: date
+    });
+  };
+  handleEndChange = date => {
+    this.setState({
+      endDate: date
+    });
+  };
+
   render() {
     return (
       <Container fluid>
+        <div>
+          <label for={DatePicker}>Start Date</label>
+          <DatePicker
+            selected={this.state.startDate}
+            onChange={this.handleStartChange}
+          />
+        </div>
+        <div>
+          <label for={DatePicker}>End Date </label>
+          <DatePicker
+            selected={this.state.endDate}
+            onChange={this.handleEndChange}
+          />
+        </div>
         <Row>
           <Col sm="4">
             <Chart
@@ -42,8 +77,22 @@ class App extends Component {
           <Col sm="4">
             <Chart
               cubejsApi={cubejsApi}
-              title="Total Listings"
-              query={{ measures: ["Listings.count"] }}
+              title="Total Settled Listings"
+              query={{
+                measures: ["Listings.count"],
+                timeDimensions: [
+                  {
+                    dimension: "Listings.systemCtime",
+                    dateRange: [this.state.startDate, this.state.endDate]
+                  }
+                ],
+                filters: [
+                  {
+                    dimension: "Listings.dateActualSettlement",
+                    operator: "set"
+                  }
+                ]
+              }}
               render={resultSet =>
                 renderSingleValue(resultSet, "Listings.count")
               }
@@ -56,14 +105,14 @@ class App extends Component {
           <Col sm="12">
             <Chart
               cubejsApi={cubejsApi}
-              title="Settled Listings Last Year"
+              title="Settled Listings During Period"
               query={{
                 measures: ["Listings.count"],
                 timeDimensions: [
                   {
                     dimension: "Listings.systemCtime",
                     granularity: "day",
-                    dateRange: "Last year"
+                    dateRange: [this.state.startDate, this.state.endDate]
                   }
                 ],
                 order: {},
