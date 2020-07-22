@@ -49,28 +49,11 @@ class App extends Component {
               }
             />
           </Col>
-          <Col sm="4">
-            <Chart
-              cubejsApi={cubejsApi}
-              title="Shipped Orders"
-              query={{
-                measures: ["Orders.count"],
-                filters: [
-                  {
-                    dimension: "Orders.status",
-                    operator: "equals",
-                    values: ["shipped"]
-                  }
-                ]
-              }}
-              render={resultSet => renderSingleValue(resultSet, "Orders.count")}
-            />
-          </Col>
         </Row>
         <br />
         <br />
         <Row>
-          <Col sm="6">
+          <Col sm="12">
             <Chart
               cubejsApi={cubejsApi}
               title="Settled Listings Last Year"
@@ -88,11 +71,6 @@ class App extends Component {
                   {
                     dimension: "Listings.dateActualSettlement",
                     operator: "set"
-                  },
-                  {
-                    dimension: "Listings.accountId",
-                    operator: "equals",
-                    values: [545]
                   }
                 ]
               }}
@@ -112,53 +90,6 @@ class App extends Component {
                   </AreaChart>
                 </ResponsiveContainer>
               )}
-            />
-          </Col>
-          <Col sm="6">
-            <Chart
-              cubejsApi={cubejsApi}
-              title="Orders by Status Over time"
-              query={{
-                measures: ["Orders.count"],
-                dimensions: ["Orders.status"],
-                timeDimensions: [
-                  {
-                    dimension: "Orders.createdAt",
-                    dateRange: ["2017-01-01", "2018-12-31"],
-                    granularity: "month"
-                  }
-                ]
-              }}
-              render={resultSet => {
-                return (
-                  <ResponsiveContainer width="100%" height={300}>
-                    <BarChart data={resultSet.chartPivot()}>
-                      <XAxis tickFormatter={dateFormatter} dataKey="x" />
-                      <YAxis tickFormatter={numberFormatter} />
-                      <Bar
-                        stackId="a"
-                        dataKey="shipped, Orders.count"
-                        name="Shipped"
-                        fill="#7DB3FF"
-                      />
-                      <Bar
-                        stackId="a"
-                        dataKey="processing, Orders.count"
-                        name="Processing"
-                        fill="#49457B"
-                      />
-                      <Bar
-                        stackId="a"
-                        dataKey="completed, Orders.count"
-                        name="Completed"
-                        fill="#FF7C78"
-                      />
-                      <Legend />
-                      <Tooltip />
-                    </BarChart>
-                  </ResponsiveContainer>
-                );
-              }}
             />
           </Col>
         </Row>
