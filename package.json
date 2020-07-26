@@ -1,0 +1,22 @@
+{
+  "name": "cubejs-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/adsy/CubeJS-Demo.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/adsy/CubeJS-Demo/issues"
+  },
+  "homepage": "https://github.com/adsy/CubeJS-Demo#readme",
+  "dependencies": {
+    "rsuite": "^4.8.0"
+  }
+}

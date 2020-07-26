@@ -17,8 +17,10 @@ import cubejs from "@cubejs-client/core";
 import Chart from "./Chart.js";
 
 import DatePicker from "react-datepicker";
+import { DateRangePicker } from "rsuite";
 
 import "react-datepicker/dist/react-datepicker.css";
+import "rsuite/dist/styles/rsuite-default.css";
 
 console.log(process.env.REACT_APP_CUBEJS_TOKEN);
 const cubejsApi = cubejs(process.env.REACT_APP_CUBEJS_TOKEN, {
@@ -34,7 +36,8 @@ const renderSingleValue = (resultSet, key) => (
 class App extends Component {
   state = {
     startDate: new Date("2019/1/1"),
-    endDate: new Date("2019/6/31")
+    endDate: new Date("2019/6/31"),
+    value: [new Date("2017/02/01"), new Date("2017/05/20")]
   };
 
   handleStartChange = date => {
@@ -51,7 +54,17 @@ class App extends Component {
   render() {
     return (
       <Container fluid>
-        <div>
+        <div className="field">
+          <DateRangePicker
+            value={this.state.value}
+            onChange={value => {
+              this.setState({ value });
+              console.log(value);
+              console.log(this.state.value[0], this.state.value[1]);
+            }}
+          />
+        </div>
+        {/* <div>
           <label for={DatePicker}>Start Date</label>
           <DatePicker
             selected={this.state.startDate}
@@ -64,7 +77,7 @@ class App extends Component {
             selected={this.state.endDate}
             onChange={this.handleEndChange}
           />
-        </div>
+        </div> */}
         <Row>
           <Col sm="2">
             <Chart
@@ -112,7 +125,7 @@ class App extends Component {
                   {
                     dimension: "Listings.systemCtime",
                     granularity: "day",
-                    dateRange: [this.state.startDate, this.state.endDate]
+                    dateRange: [this.state.value[0], this.state.value[1]]
                   }
                 ],
                 order: {},
