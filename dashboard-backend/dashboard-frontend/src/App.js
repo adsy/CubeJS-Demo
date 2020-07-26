@@ -35,20 +35,13 @@ const renderSingleValue = (resultSet, key) => (
 
 class App extends Component {
   state = {
-    startDate: new Date("2019/1/1"),
-    endDate: new Date("2019/6/31"),
-    value: [new Date("2017/02/01"), new Date("2017/05/20")]
+    value: [new Date("2019/1/1"), new Date("2019/6/31")]
   };
 
-  handleStartChange = date => {
-    this.setState({
-      startDate: date
-    });
-  };
-  handleEndChange = date => {
-    this.setState({
-      endDate: date
-    });
+  HandleDateFormat = date => {
+    let formatted_date =
+      date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear();
+    return formatted_date;
   };
 
   render() {
@@ -64,20 +57,6 @@ class App extends Component {
             }}
           />
         </div>
-        {/* <div>
-          <label for={DatePicker}>Start Date</label>
-          <DatePicker
-            selected={this.state.startDate}
-            onChange={this.handleStartChange}
-          />
-        </div>
-        <div>
-          <label for={DatePicker}>End Date </label>
-          <DatePicker
-            selected={this.state.endDate}
-            onChange={this.handleEndChange}
-          />
-        </div> */}
         <Row>
           <Col sm="2">
             <Chart
@@ -96,7 +75,7 @@ class App extends Component {
                 timeDimensions: [
                   {
                     dimension: "Listings.systemCtime",
-                    dateRange: [this.state.startDate, this.state.endDate]
+                    dateRange: [this.state.value[0], this.state.value[1]]
                   }
                 ],
                 filters: [
@@ -118,7 +97,12 @@ class App extends Component {
           <Col sm="12">
             <Chart
               cubejsApi={cubejsApi}
-              title="Settled Listings During Period"
+              title={
+                "Listings settled during " +
+                this.HandleDateFormat(this.state.value[0]) +
+                " - " +
+                this.HandleDateFormat(this.state.value[1])
+              }
               query={{
                 measures: ["Listings.count"],
                 timeDimensions: [
